@@ -3,6 +3,7 @@
             [async-jetty.utils :as utils]
             [ring.middleware.defaults :as default-middleware]
             [async-jetty.handlers :as handlers]
+            [async-jetty.env :as env]
             [async-jetty.middleware :as app-middleware]
             [compojure.core :refer [ANY defroutes]]
             [compojure.middleware :as compojure-middleware]
@@ -72,10 +73,10 @@
   [handler-fn]
   (fn [request-map response-callback error-callback]
     (try (hand-off-request handler-fn response-callback error-callback request-map)
-         (catch RejectedExecutionException e
+         (catch RejectedExecutionException _
            (ctl/info "Exceeded capacity, dropping request")
            (response-callback
-            {:status 429 :body "<h1>Too many requests</h1>"})))))
+             {:status 429 :body "<h1>Too many requests</h1>"})))))
 
 
 (defonce app
@@ -87,8 +88,9 @@
 
 
 (defn -main
-  [& args]
+  [& _]
   (utils/log-load open-requests completed-requests tp-queue 1000)
+  (env/start-mbean-server)
   (jetty/run-jetty app
                    {:port                  3100
                     :join?                 true
