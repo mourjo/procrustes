@@ -1,8 +1,9 @@
 (ns async-jetty.handlers
-  (:require [hiccup.core :as hiccup]))
+  (:require [hiccup.core :as hiccup]
+            [clojure.tools.logging :as ctl]))
 
 
-(def sleep-time 3000)
+(def sleep-time-sec 3)
 
 
 (defn generate-body
@@ -12,10 +13,11 @@
 
 (defn slow-poke
   [request]
-  (Thread/sleep sleep-time)
+  (Thread/sleep (* 1000 sleep-time-sec))
   {:status  200
    :headers {"Content-Type" "text/html"}
    :body    (generate-body request)})
+
 
 (defn fast-poke
   [request]
