@@ -3,6 +3,7 @@
 
 (def open-requests (agent 0))
 (def completed-requests (agent 0))
+(def timers (agent (sorted-map)))
 (defonce counter (atom 0))
 
 (defn wrap-request-id
@@ -12,11 +13,21 @@
       (handler (assoc request :request-id id)))))
 
 
+(defmacro time-secs
+  [expr]
+  `(let [start# (System/nanoTime)
+         ret# ~expr]
+     {:elapsed-secs (/ (double (- (System/nanoTime) start#)) 1000000000.0)
+      :result       ret#}))
+
+
 (defn wrap-request-counter
   [handler]
   (fn [request]
     (try (send open-requests inc)
-         (handler request)
+         (let [{:keys [result elapsed-secs]} (time-secs (handler request))]
+           (send timers update (:uri request) conj elapsed-secs)
+           result)
          (finally (send completed-requests inc)))))
 
 

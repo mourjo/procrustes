@@ -16,7 +16,8 @@
                                  BlockingQueue
                                  RejectedExecutionException)
            (me.mourjo RunnableQueueBuilder)
-           (org.eclipse.jetty.io EofException)))
+           (org.eclipse.jetty.io EofException)
+           (org.eclipse.jetty.server LowResourceMonitor)))
 
 (def max-allowed-delay-sec 5)
 (def max-pending-requests 20)
@@ -108,9 +109,9 @@
                                                           :body   "<h1>Try again later</h1>"})
                                 :max-threads           8
                                 :min-threads           1
-                                :max-queued-requests   500 ;; <--- doesn't matter
+                                :max-queued-requests   500  ;; <--- doesn't matter
                                 })]
-    (utils/log-load tp-queue (:pool jetty) 1000)))
+    (utils/log-load "LOAD-SHEDDING" tp-queue (:pool jetty) 1000)))
 
 
 (defn start-basic-server
@@ -122,7 +123,7 @@
                                 :max-queued-requests 500
                                 ;; only difference from Moby:
                                 :max-threads         8})]
-    (utils/log-load (:pool jetty) 1000)))
+    (utils/log-load "NON-LOAD-SHEDDING" (:pool jetty) 1000)))
 
 
 (defn -main
