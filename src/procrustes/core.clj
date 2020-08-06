@@ -1,10 +1,10 @@
-(ns async-jetty.core
+(ns procrustes.core
   (:require [ring.adapter.jetty :as jetty]
-            [async-jetty.utils :as utils]
+            [procrustes.utils :as utils]
             [ring.middleware.defaults :as default-middleware]
-            [async-jetty.handlers :as handlers]
-            [async-jetty.env :as env]
-            [async-jetty.middleware :as app-middleware]
+            [procrustes.handlers :as handlers]
+            [procrustes.env :as env]
+            [procrustes.middleware :as app-middleware]
             [compojure.core :refer [ANY defroutes]]
             [compojure.middleware :as compojure-middleware]
             [compojure.route :refer [not-found]]

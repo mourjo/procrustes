@@ -1,4 +1,4 @@
-(ns async-jetty.middleware
+(ns procrustes.middleware
   (:require [clojure.tools.logging :as ctl]))
 
 

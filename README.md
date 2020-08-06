@@ -1,4 +1,4 @@
-# async_jetty
+# procrustes
 
 FIXME: description
 
@@ -10,7 +10,7 @@ Download from http://example.com/FIXME.
 
 FIXME: explanation
 
-    $ java -jar async_jetty-0.1.0-standalone.jar [args]
+    $ java -jar procrustes-0.1.0-standalone.jar [args]
 
 ## Options
 

@@ -1,4 +1,4 @@
-(defproject async_jetty "0.1.0-SNAPSHOT"
+(defproject procrustes "0.1.0-SNAPSHOT"
   :description "FIXME: write description"
   :url "http://example.com/FIXME"
   :license {:name "EPL-2.0 OR GPL-2.0-or-later WITH Classpath-exception-2.0"
@@ -15,9 +15,7 @@
                  [log4j/log4j "1.2.17"]
                  [org.slf4j/slf4j-log4j12 "1.7.30"]
                  [ring/ring-defaults "0.3.2"]
-                 ;; https://mvnrepository.com/artifact/org.eclipse.jetty/jetty-jmx
-                 [org.eclipse.jetty/jetty-jmx "9.4.31.v20200723"]
-                 ]
+                 [org.eclipse.jetty/jetty-jmx "9.4.31.v20200723"]]
   :jvm-opts ^:replace ["-server"
                        "-Xms1g"
                        "-Xmx3g"
@@ -25,7 +23,7 @@
                        "-Duser.timezone=UTC"]
   :java-source-paths ["java_src"]
   :javac-options ["-target" "1.8" "-source" "1.8"]
-  :main ^:skip-aot async-jetty.core
+  :main ^:skip-aot procrustes.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot      :all
                        :jvm-opts ["-Dclojure.compiler.direct-linking=true"]}})

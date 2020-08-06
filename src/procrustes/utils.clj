@@ -1,4 +1,4 @@
-(ns async-jetty.utils
+(ns procrustes.utils
   (:require [clojure.tools.logging :as ctl])
   (:import (java.util.concurrent ThreadFactory)))
 

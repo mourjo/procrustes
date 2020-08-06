@@ -1,6 +1,6 @@
-(ns async-jetty.handlers
+(ns procrustes.handlers
   (:require [hiccup.core :as hiccup]
-            [async-jetty.env :as env]))
+            [procrustes.env :as env]))
 
 
 (defn generate-body

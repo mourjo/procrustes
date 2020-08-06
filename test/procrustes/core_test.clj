@@ -1,6 +1,6 @@
-(ns async-jetty.core-test
+(ns procrustes.core-test
   (:require [clojure.test :refer :all]
-            [async-jetty.core :refer :all]))
+            [procrustes.core :refer :all]))
 
 (deftest a-test
   (testing "FIXME, I fail."
