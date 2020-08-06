@@ -1,9 +1,8 @@
-(ns procrustes.middleware)
+(ns procrustes.middleware
+  (:require [clojure.tools.logging :as ctl]))
 
 (def open-requests (agent 0))
 (def completed-requests (agent 0))
-
-
 (defonce counter (atom 0))
 
 (defn wrap-request-id
@@ -19,3 +18,12 @@
     (try (send open-requests inc)
          (handler request)
          (finally (send completed-requests inc)))))
+
+
+(defn wrap-exceptions
+  [handler]
+  (fn [request]
+    (try
+      (handler request)
+      (catch Throwable t
+        (ctl/error "Something was wrong:" t)))))

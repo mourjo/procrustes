@@ -1,11 +1,12 @@
 (ns procrustes.handlers
   (:require [hiccup.core :as hiccup]
-            [procrustes.env :as env]))
+            [procrustes.env :as env])
+  (:import (java.util UUID)))
 
 
 (defn generate-body
   [request]
-  (hiccup/html [:h1 (str "You summoned " (:uri request))]))
+  (hiccup/html [:h1 (str "You summoned " (:uri request) " " (UUID/randomUUID))]))
 
 
 (defn slow-poke

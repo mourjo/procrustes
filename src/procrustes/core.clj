@@ -7,9 +7,14 @@
             [procrustes.middleware :as app-middleware]
             [compojure.core :refer [ANY defroutes]]
             [compojure.route :refer [not-found]]
+            [clojure.string :as cs]
             [clojure.tools.logging :as ctl])
   (:gen-class)
-  (:import (java.util.concurrent ExecutorService ThreadPoolExecutor TimeUnit BlockingQueue RejectedExecutionException)
+  (:import (java.util.concurrent ExecutorService
+                                 ThreadPoolExecutor
+                                 TimeUnit
+                                 BlockingQueue
+                                 RejectedExecutionException)
            (me.mourjo RunnableQueueBuilder)
            (org.eclipse.jetty.io EofException)))
 
@@ -78,43 +83,51 @@
            (ctl/error t)))))
 
 
-(defonce app
+(defonce default-app
          (-> routes
              (default-middleware/wrap-defaults default-middleware/site-defaults)
              app-middleware/wrap-request-id
              app-middleware/wrap-request-counter
+             app-middleware/wrap-exceptions))
+
+(defonce load-shedding-app
+         (-> default-app
              async-to-sync))
 
-(defonce control-app
-         (-> routes
-             (default-middleware/wrap-defaults default-middleware/site-defaults)
-             app-middleware/wrap-request-id
-             app-middleware/wrap-request-counter))
+
+(defn start-load-shedding-server
+  []
+  (ctl/info "Staring load-shedding server")
+  (let [jetty (jetty/run-jetty load-shedding-app
+                               {:port                  3100
+                                :join?                 false
+                                :async?                true
+                                :async-timeout         (* 1000 max-allowed-delay-sec)
+                                :async-timeout-handler (fn [_]
+                                                         {:status 504
+                                                          :body   "<h1>Try again later</h1>"})
+                                :max-threads           8
+                                :min-threads           1
+                                :max-queued-requests   500 ;; <--- doesn't matter
+                                })]
+    (utils/log-load tp-queue (:pool jetty) 1000)))
+
+
+(defn start-basic-server
+  []
+  (ctl/info "Staring non-load-shedding server")
+  (let [jetty (jetty/run-jetty default-app
+                               {:port                3200
+                                :join?               false
+                                :max-queued-requests 500
+                                ;; only difference from Moby:
+                                :max-threads         8})]
+    (utils/log-load (:pool jetty) 1000)))
 
 
 (defn -main
   [& _]
   (env/start-mbean-server)
-  (let [jetty (jetty/run-jetty app
-                                {:port                  3100
-                                 :join?                 false
-                                 :async?                true
-                                 :async-timeout         (* 1000 max-allowed-delay-sec)
-                                 :async-timeout-handler (fn [_]
-                                                          {:status 504
-                                                           :body   "<h1>Try again later</h1>"})
-                                 :max-threads           8
-                                 :min-threads           1
-                                 :max-queued-requests   500   ;; <--- doesn't matter
-                                 })]
-    (utils/log-load tp-queue (:pool jetty) 1000))
-
-  ;; copied from Moby:
-  ;(let [jetty (jetty/run-jetty control-app
-  ;                       {:port                3200
-  ;                        :join?               false
-  ;                        :max-queued-requests 500
-  ;                        :max-threads         8
-  ;                        })]
-  ;  (utils/log-load nil (:pool jetty) 1000))
-  )
+  (if (= "TRUE" (cs/upper-case (or (System/getenv "SHED_LOAD") "false")))
+    (start-load-shedding-server)
+    (start-basic-server)))

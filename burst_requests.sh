@@ -1,70 +1,280 @@
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
-curl -vvv -L 'http://localhost:3100/slow/' &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
+curl -s  -L "http://localhost:3200/slow" > /dev/null &
+curl -s  -L "http://localhost:3100/slow" > /dev/null &
