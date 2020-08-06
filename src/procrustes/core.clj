@@ -6,21 +6,13 @@
             [procrustes.env :as env]
             [procrustes.middleware :as app-middleware]
             [compojure.core :refer [ANY defroutes]]
-            [compojure.middleware :as compojure-middleware]
             [compojure.route :refer [not-found]]
             [clojure.tools.logging :as ctl])
   (:gen-class)
   (:import (java.util.concurrent ExecutorService ThreadPoolExecutor TimeUnit BlockingQueue RejectedExecutionException)
            (me.mourjo RunnableQueueBuilder)
-           (java.lang.management ManagementFactory)
-           (org.eclipse.jetty.jmx MBeanContainer ConnectorServer)
-           (org.eclipse.jetty.server.handler StatisticsHandler)
-           (org.eclipse.jetty.server ConnectorStatistics ServerConnectionStatistics)
-           (javax.management.remote JMXServiceURL)
            (org.eclipse.jetty.io EofException)))
 
-(def open-requests (agent 0))
-(def completed-requests (agent 0))
 (def max-allowed-delay-sec 5)
 (def max-pending-requests 20)
 
@@ -39,23 +31,15 @@
 
 
 (defroutes routes
+           (ANY "/" params "<h1>Hello, try routes: /slow or /fast</h1>")
            (ANY "/slow" params (handlers/slow-poke params))
            (ANY "/fast" params (handlers/fast-poke params))
            (ANY "*" _ (not-found "Incorrect route")))
 
 
-(defn process-request
-  [handler-fn response-callback request-map]
-  (try (send open-requests inc)
-       (response-callback (handler-fn request-map))
-       (finally (send completed-requests inc))))
-
-
 (defn drop-request
-  [error-callback request-map]
-  (ctl/info "Shedding load: " (:uri request-map))
-  ;;(error-callback (ex-info "Request expired, the client should not see this" {}))
-  )
+  [request-map]
+  (ctl/info "Shedding load: " (:uri request-map)))
 
 
 (defn delayed-request?
@@ -65,13 +49,13 @@
 
 
 (defn hand-off-request
-  [handler-fn response-callback error-callback request-map]
+  [handler-fn response-callback request-map]
   ;; no binding conveyance required here
   (.submit request-processor-pool
            ^Runnable (fn []
                        (try (if (delayed-request? request-map)
-                              (drop-request error-callback request-map)
-                              (process-request handler-fn response-callback request-map))
+                              (drop-request request-map)
+                              (response-callback (handler-fn request-map)))
                             (catch EofException t
                               ;; connection has been closed by the client
                               (ctl/error t))
@@ -85,52 +69,52 @@
 (defn async-to-sync
   [handler-fn]
   (fn [request-map response-callback error-callback]
-    (try (hand-off-request handler-fn response-callback error-callback request-map)
+    (try (hand-off-request handler-fn response-callback request-map)
          (catch RejectedExecutionException _
-           (ctl/info "Exceeded capacity, dropping request")
+           (drop-request request-map)
            (response-callback
-             {:status 429 :body "<h1>Too many requests</h1>"}))
+             {:status 429 :body "<h1>Try again later</h1>"}))
          (catch Throwable t
            (ctl/error t)))))
 
 
 (defonce app
          (-> routes
-             compojure-middleware/wrap-canonical-redirect
              (default-middleware/wrap-defaults default-middleware/site-defaults)
              app-middleware/wrap-request-id
+             app-middleware/wrap-request-counter
              async-to-sync))
 
 (defonce control-app
          (-> routes
-             compojure-middleware/wrap-canonical-redirect
              (default-middleware/wrap-defaults default-middleware/site-defaults)
-             app-middleware/wrap-request-id))
+             app-middleware/wrap-request-id
+             app-middleware/wrap-request-counter))
 
 
 (defn -main
   [& _]
   (env/start-mbean-server)
-  ;(let [jetty (jetty/run-jetty app
-  ;                              {:port                  3100
-  ;                               :join?                 true
-  ;                               :async?                true
-  ;                               :async-timeout         (* 1000 max-allowed-delay-sec)
-  ;                               :async-timeout-handler (fn [_]
-  ;                                                        {:status 504
-  ;                                                         :body   "<h1>Request timed out, mate</h1>"})
-  ;                               :max-threads           5
-  ;                               :min-threads           1
-  ;                               :max-queued-requests   8   ;; <--- doesn't matter
-  ;                               })]
-  ;  (utils/log-load open-requests completed-requests tp-queue (:pool jetty) 1000))
+  (let [jetty (jetty/run-jetty app
+                                {:port                  3100
+                                 :join?                 false
+                                 :async?                true
+                                 :async-timeout         (* 1000 max-allowed-delay-sec)
+                                 :async-timeout-handler (fn [_]
+                                                          {:status 504
+                                                           :body   "<h1>Try again later</h1>"})
+                                 :max-threads           8
+                                 :min-threads           1
+                                 :max-queued-requests   500   ;; <--- doesn't matter
+                                 })]
+    (utils/log-load tp-queue (:pool jetty) 1000))
 
   ;; copied from Moby:
-  (let [jetty (jetty/run-jetty control-app
-                         {:port                3200
-                          :join?               false
-                          :max-queued-requests 500
-                          :max-threads         8
-                          })]
-    (utils/log-load open-requests completed-requests nil (:pool jetty) 1000))
+  ;(let [jetty (jetty/run-jetty control-app
+  ;                       {:port                3200
+  ;                        :join?               false
+  ;                        :max-queued-requests 500
+  ;                        :max-threads         8
+  ;                        })]
+  ;  (utils/log-load nil (:pool jetty) 1000))
   )

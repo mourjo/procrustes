@@ -1,6 +1,8 @@
 (ns procrustes.utils
-  (:require [clojure.tools.logging :as ctl])
-  (:import (java.util.concurrent ThreadFactory)))
+  (:require [clojure.tools.logging :as ctl]
+            [procrustes.middleware :as app-middleware])
+  (:import (java.util.concurrent ThreadFactory BlockingQueue)
+           (org.eclipse.jetty.util.thread QueuedThreadPool)))
 
 
 (defn now-secs []
@@ -8,18 +10,18 @@
 
 
 (defn log-load
-  [open-requests completed-requests tp-queue jetty-pool every-secs]
+  [^BlockingQueue tp-queue ^QueuedThreadPool jetty-pool every-secs]
   (Class/forName "org.apache.log4j.Logger")
   (loop []
     (if tp-queue
       (ctl/info (format "Open: %d, Completed: %d, Handler queue: %d, Jetty queue: %d"
-                        @open-requests
-                        @completed-requests
+                        @app-middleware/open-requests
+                        @app-middleware/completed-requests
                         (.size tp-queue)
                         (.getQueueSize jetty-pool)))
       (ctl/info (format "Open: %d, Completed: %d, Jetty queue: %d"
-                        @open-requests
-                        @completed-requests
+                        @app-middleware/open-requests
+                        @app-middleware/completed-requests
                         (.getQueueSize jetty-pool))))
     (Thread/sleep every-secs)
     (recur)))
