@@ -8,19 +8,21 @@
 
 
 (defn log-load
-  [open-requests completed-requests tp-queue every-secs]
+  [open-requests completed-requests tp-queue jetty-pool every-secs]
   (Class/forName "org.apache.log4j.Logger")
-  (doto
-    (Thread. ^Runnable
-             (fn []
-               (ctl/info (format "Open: %d, Completed: %d, Thread-pool queue: %d"
-                                 @open-requests
-                                 @completed-requests
-                                 (.size tp-queue)))
-               (Thread/sleep every-secs)
-               (recur)))
-    (.setDaemon true)
-    (.start)))
+  (loop []
+    (if tp-queue
+      (ctl/info (format "Open: %d, Completed: %d, Handler queue: %d, Jetty queue: %d"
+                        @open-requests
+                        @completed-requests
+                        (.size tp-queue)
+                        (.getQueueSize jetty-pool)))
+      (ctl/info (format "Open: %d, Completed: %d, Jetty queue: %d"
+                        @open-requests
+                        @completed-requests
+                        (.getQueueSize jetty-pool))))
+    (Thread/sleep every-secs)
+    (recur)))
 
 
 (let [counter (atom 0)]
