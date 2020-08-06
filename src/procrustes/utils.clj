@@ -1,41 +1,48 @@
 (ns procrustes.utils
-  (:require [clojure.tools.logging :as ctl]
-            [procrustes.middleware :as app-middleware])
+  (:require [procrustes.middleware :as app-middleware]
+            [clojure.tools.logging :as ctl])
   (:import (java.util.concurrent ThreadFactory BlockingQueue)
            (org.eclipse.jetty.util.thread QueuedThreadPool)))
 
+(def load-shedding-server "LS")
+(def non-load-shedding-server "NON-LS")
 
 (defn now-secs []
   (int (/ (System/currentTimeMillis) 1000)))
 
+
 (defn mean
   [stats]
   (reduce-kv (fn [acc k v]
-               (format "%s -- %s: %3.2f sec" acc k (/ (reduce + v) (count v))))
+               (if (= k "/")
+                 acc
+                 (str (format "%s %s=%2.2f" acc k (/ (reduce + v) (count v))) "s")))
              ""
              stats))
-
 
 (defn log-load
   ([server-type ^QueuedThreadPool jetty-pool every-secs]
    (log-load server-type nil jetty-pool every-secs))
   ([server-type ^BlockingQueue tp-queue ^QueuedThreadPool jetty-pool every-secs]
-   (Class/forName "org.apache.log4j.Logger")
-   (println "\n\n\n***Server-type: " server-type " ***")
+   (ctl/info "\n\n\n*** Server-type:" server-type "***")
    (loop []
      (let [stats (mean @app-middleware/timers)]
        (if tp-queue
-         (.print System/out (format "\rOpen: %3d, Completed: %3d, Handler queue: %3d, Jetty queue: %3d (approx), %s"
-                                    @app-middleware/open-requests
-                                    @app-middleware/completed-requests
-                                    (.size tp-queue)
-                                    (.getQueueSize jetty-pool)
-                                    stats))
-         (.print System/out (format "\rOpen: %3d, Completed: %3d, Jetty queue: %3d (approx), %s"
-                                    @app-middleware/open-requests
-                                    @app-middleware/completed-requests
-                                    (.getQueueSize jetty-pool)
-                                    stats))))
+         (ctl/info
+           (format "[%s] Open: %d, Completed: %d, Handler queue: %d, Jetty queue: %d, %s, "
+                   server-type
+                   @app-middleware/open-requests
+                   @app-middleware/completed-requests
+                   (.size tp-queue)
+                   (.getQueueSize jetty-pool)
+                   stats))
+         (ctl/info
+           (format "[%s] Open: %d, Completed: %d, Jetty queue: %d, %s"
+                   server-type
+                   @app-middleware/open-requests
+                   @app-middleware/completed-requests
+                   (.getQueueSize jetty-pool)
+                   stats))))
      (Thread/sleep every-secs)
      (recur))))
 

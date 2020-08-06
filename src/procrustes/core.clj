@@ -16,8 +16,7 @@
                                  BlockingQueue
                                  RejectedExecutionException)
            (me.mourjo RunnableQueueBuilder)
-           (org.eclipse.jetty.io EofException)
-           (org.eclipse.jetty.server LowResourceMonitor)))
+           (org.eclipse.jetty.io EofException)))
 
 (def max-allowed-delay-sec 5)
 (def max-pending-requests 20)
@@ -37,7 +36,7 @@
 
 
 (defroutes routes
-           (ANY "/" params "<h1>Hello, try routes: /slow or /fast</h1>")
+           (ANY "/" params (handlers/default-response params))
            (ANY "/slow" params (handlers/slow-poke params))
            (ANY "/fast" params (handlers/fast-poke params))
            (ANY "*" _ (not-found "Incorrect route")))
@@ -64,7 +63,7 @@
                               (response-callback (handler-fn request-map)))
                             (catch EofException t
                               ;; connection has been closed by the client
-                              (ctl/error t))
+                              )
                             (catch IllegalStateException t
                               ;; request lifecycle changed, async timeout handler has already closed the request
                               )
@@ -86,13 +85,16 @@
 
 (defonce default-app
          (-> routes
+             (app-middleware/wrap-server-type utils/non-load-shedding-server)
              (default-middleware/wrap-defaults default-middleware/site-defaults)
              app-middleware/wrap-request-id
              app-middleware/wrap-request-counter
              app-middleware/wrap-exceptions))
 
+
 (defonce load-shedding-app
          (-> default-app
+             (app-middleware/wrap-server-type utils/load-shedding-server)
              async-to-sync))
 
 
@@ -111,7 +113,7 @@
                                 :min-threads           1
                                 :max-queued-requests   500  ;; <--- doesn't matter
                                 })]
-    (utils/log-load "LOAD-SHEDDING" tp-queue (:pool jetty) 1000)))
+    (utils/log-load utils/load-shedding-server tp-queue (:pool jetty) 1000)))
 
 
 (defn start-basic-server
@@ -123,7 +125,7 @@
                                 :max-queued-requests 500
                                 ;; only difference from Moby:
                                 :max-threads         8})]
-    (utils/log-load "NON-LOAD-SHEDDING" (:pool jetty) 1000)))
+    (utils/log-load utils/non-load-shedding-server (:pool jetty) 1000)))
 
 
 (defn -main

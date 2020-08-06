@@ -26,7 +26,11 @@
   (fn [request]
     (try (send open-requests inc)
          (let [{:keys [result elapsed-secs]} (time-secs (handler request))]
-           (send timers update (:uri request) conj elapsed-secs)
+           (send timers
+                 update
+                 (:uri request)
+                 (fn [curr]
+                   (take 20 (conj (or curr []) elapsed-secs))))
            result)
          (finally (send completed-requests inc)))))
 
@@ -38,3 +42,8 @@
       (handler request)
       (catch Throwable t
         (ctl/error "Something was wrong:" t)))))
+
+(defn wrap-server-type
+  [handler server-type]
+  (fn [request]
+    (handler (assoc request :server-type (:server-type request server-type)))))
