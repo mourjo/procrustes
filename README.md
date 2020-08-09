@@ -1,32 +1,12 @@
 # procrustes
 
-FIXME: description
+A demo repository with load balancing in a Ring/Jetty webserver written in Clojure. More details to come soon, stay tuned.
 
-## Installation
+The Makefile is a good place to start though.
 
-Download from http://example.com/FIXME.
+> You may recall, Poseidon’s son Procrustes had a very, um, one-size-fits-all approach to accommodating his overnight guests. In its simplest form, load shedding can be a bit like that too: observe some easily obtained local measure like CPU load, memory utilization or request queue length, and when this load number crosses a predetermined “safe” level as established by load testing, drop a fraction of incoming traffic to bring the load back to safe levels.
 
-## Usage
 
-FIXME: explanation
-
-    $ java -jar procrustes-0.1.0-standalone.jar [args]
-
-## Options
-
-FIXME: listing of options this app accepts.
-
-## Examples
-
-...
-
-### Bugs
-
-...
-
-### Any Other Sections
-### That You Think
-### Might be Useful
 
 ## License
 

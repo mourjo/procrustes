@@ -107,7 +107,7 @@
                                 :join?                 false
                                 :async?                true
                                 :async-timeout         (* 1000 max-allowed-delay-sec)
-                                :async-timeout-handler (fn [_]
+                                :async-timeout-handler (fn [_ _ _]
                                                          {:status 504
                                                           :body   "<h1>Try again later</h1>"})
                                 :max-threads           8

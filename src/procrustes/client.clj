@@ -5,8 +5,6 @@
             [com.climate.claypoole :as cp]
             [clj-statsd :as statsd]))
 
-(statsd/setup "localhost" 8125)
-
 (defonce request-counter
   (atom {utils/non-load-shedding-server 0
          utils/load-shedding-server 0}))
@@ -71,6 +69,7 @@
 
 (defn burst
   []
+  (statsd/setup "localhost" 8125)
   (slow-continuous-load)
   (Thread/sleep 120000)
   (ctl/info "Starting burst")
@@ -82,6 +81,7 @@
 
 (defn steady
   []
+  (statsd/setup "localhost" 8125)
   (ctl/info "Starting steady stream")
   (future
     (cp/with-shutdown! [pool (cp/threadpool 40)]

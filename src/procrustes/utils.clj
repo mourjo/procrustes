@@ -20,6 +20,7 @@
              ""
              stats))
 
+
 (defn log-load
   ([server-type ^QueuedThreadPool jetty-pool every-secs]
    (log-load server-type nil jetty-pool every-secs))
@@ -29,20 +30,20 @@
      (let [stats (mean @app-middleware/timers)]
        (if tp-queue
          (ctl/info
-           (format "[%s] Open: %d, Completed: %d, Handler queue: %d, Jetty queue: %d, %s, "
-                   server-type
-                   @app-middleware/open-requests
-                   @app-middleware/completed-requests
-                   (.size tp-queue)
-                   (.getQueueSize jetty-pool)
-                   stats))
+          (format "[%s] Open: %d, Completed: %d, Handler queue: %d, Jetty queue: %d, %s, "
+                  server-type
+                  @app-middleware/open-requests
+                  @app-middleware/completed-requests
+                  (.size tp-queue)
+                  (.getQueueSize jetty-pool)
+                  stats))
          (ctl/info
-           (format "[%s] Open: %d, Completed: %d, Jetty queue: %d, %s"
-                   server-type
-                   @app-middleware/open-requests
-                   @app-middleware/completed-requests
-                   (.getQueueSize jetty-pool)
-                   stats))))
+          (format "[%s] Open: %d, Completed: %d, Jetty queue: %d, %s"
+                  server-type
+                  @app-middleware/open-requests
+                  @app-middleware/completed-requests
+                  (.getQueueSize jetty-pool)
+                  stats))))
      (Thread/sleep every-secs)
      (recur))))
 

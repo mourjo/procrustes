@@ -46,6 +46,7 @@
       (catch Throwable t
         (ctl/error "Something was wrong:" t)))))
 
+
 (defn wrap-server-type
   [handler server-type]
   (fn [request]
