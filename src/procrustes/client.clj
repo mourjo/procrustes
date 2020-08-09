@@ -36,7 +36,7 @@
   (cp/with-shutdown! [pool (cp/threadpool 500)]
     (let [futures (cp/upmap pool
                             (fn [_]
-                              (Thread/sleep 500)
+                              (Thread/sleep (+ 500 (rand-int 1000)))
                               (http-get server-type route))
                             (range n))]
       (mapv identity futures)
@@ -84,7 +84,7 @@
   []
   (ctl/info "Starting steady stream")
   (future
-    (cp/with-shutdown! [pool (cp/threadpool 100)]
+    (cp/with-shutdown! [pool (cp/threadpool 40)]
       (loop []
         (cp/future pool
                    (http-get utils/load-shedding-server
@@ -95,7 +95,7 @@
         (Thread/sleep 750)
         (recur))))
 
-  (cp/with-shutdown! [pool (cp/threadpool 100)]
+  (cp/with-shutdown! [pool (cp/threadpool 40)]
     (loop []
       (cp/future pool
                  (http-get utils/load-shedding-server
