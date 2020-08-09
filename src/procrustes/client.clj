@@ -21,7 +21,7 @@
           (statsd/increment (str server-type ".response_code." (:status response)))
           (ctl/info (format "Request %d completed for" id)
                     server-type
-                    route )
+                    route)
           response))
       (catch Exception e
         (statsd/increment (str server-type ".response_code.FAIL"))
@@ -73,7 +73,35 @@
   []
   (slow-continuous-load)
   (Thread/sleep 120000)
-  (ctl/info "Starting burst...")
+  (ctl/info "Starting burst")
   (let [f1 (future (burst-load-shedding-server))
         f2 (future (burst-non-load-shedding-server))]
-    @f1 @f2))
+    @f1 @f2)
+  (ctl/info "Finished burst"))
+
+
+(defn steady
+  []
+  (ctl/info "Starting steady stream")
+  (future
+    (cp/with-shutdown! [pool (cp/threadpool 100)]
+      (loop []
+        (cp/future pool
+                   (http-get utils/load-shedding-server
+                             "http://localhost:3100/slow"))
+        (cp/future pool
+                   (http-get utils/non-load-shedding-server
+                             "http://localhost:3200/slow"))
+        (Thread/sleep 750)
+        (recur))))
+
+  (cp/with-shutdown! [pool (cp/threadpool 100)]
+    (loop []
+      (cp/future pool
+                 (http-get utils/load-shedding-server
+                           "http://localhost:3100/fast"))
+      (cp/future pool
+                 (http-get utils/non-load-shedding-server
+                           "http://localhost:3200/fast"))
+      (Thread/sleep 750)
+      (recur))))

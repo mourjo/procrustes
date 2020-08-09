@@ -8,7 +8,8 @@ compile:
 	lein -U do clean, compile, uberjar
 
 steady_requests:
-	SLEEP=1 ./steady_requests.sh
+	# SLEEP=1 ./steady_requests.sh
+	lein run -m procrustes.client/steady
 
 burst_request:
 	# ./burst_requests.sh
