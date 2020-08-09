@@ -5,7 +5,7 @@
            (org.eclipse.jetty.util.thread QueuedThreadPool)))
 
 (def load-shedding-server "LS")
-(def non-load-shedding-server "NON-LS")
+(def non-load-shedding-server "NON_LS")
 
 (defn now-secs []
   (int (/ (System/currentTimeMillis) 1000)))

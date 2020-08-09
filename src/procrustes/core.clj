@@ -8,6 +8,7 @@
             [compojure.core :refer [ANY defroutes]]
             [compojure.route :refer [not-found]]
             [clojure.string :as cs]
+            [clj-statsd :as statsd]
             [clojure.tools.logging :as ctl])
   (:gen-class)
   (:import (java.util.concurrent ExecutorService
@@ -85,10 +86,10 @@
 
 (defonce default-app
          (-> routes
-             (app-middleware/wrap-server-type utils/non-load-shedding-server)
              (default-middleware/wrap-defaults default-middleware/site-defaults)
              app-middleware/wrap-request-id
              app-middleware/wrap-request-counter
+             (app-middleware/wrap-server-type utils/non-load-shedding-server)
              app-middleware/wrap-exceptions))
 
 
@@ -130,7 +131,7 @@
 
 (defn -main
   [& _]
-  (env/start-mbean-server)
+  (env/start)
   (if (= "TRUE" (cs/upper-case (or (System/getenv "SHED_LOAD") "false")))
     (start-load-shedding-server)
     (start-basic-server)))

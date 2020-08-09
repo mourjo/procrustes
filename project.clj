@@ -15,7 +15,8 @@
                  [log4j/log4j "1.2.17"]
                  [org.slf4j/slf4j-log4j12 "1.7.30"]
                  [ring/ring-defaults "0.3.2"]
-                 [org.eclipse.jetty/jetty-jmx "9.4.31.v20200723"]]
+                 [org.eclipse.jetty/jetty-jmx "9.4.31.v20200723"]
+                 [clj-statsd "0.4.0"]]
   :jvm-opts ^:replace ["-server"
                        "-Xms1g"
                        "-Xmx3g"

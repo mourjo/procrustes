@@ -1,5 +1,6 @@
 (ns procrustes.middleware
-  (:require [clojure.tools.logging :as ctl]))
+  (:require [clojure.tools.logging :as ctl]
+            [clj-statsd :as statsd]))
 
 (def open-requests (agent 0))
 (def completed-requests (agent 0))
@@ -25,13 +26,15 @@
   [handler]
   (fn [request]
     (try (send open-requests inc)
-         (let [{:keys [result elapsed-secs]} (time-secs (handler request))]
-           (send timers
-                 update
-                 (:uri request)
-                 (fn [curr]
-                   (take 20 (conj (or curr []) elapsed-secs))))
-           result)
+         (statsd/increment (str (name (:server-type request)) "_request_count"))
+         (statsd/with-timing (str (name (:server-type request)) "_request_time")
+                             (let [{:keys [result elapsed-secs]} (time-secs (handler request))]
+                               (send timers
+                                     update
+                                     (:uri request)
+                                     (fn [curr]
+                                       (take 20 (conj (or curr []) elapsed-secs))))
+                               result))
          (finally (send completed-requests inc)))))
 
 

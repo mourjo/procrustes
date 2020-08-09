@@ -11,4 +11,5 @@ steady_requests:
 	SLEEP=1 ./steady_requests.sh
 
 burst_request:
-	./burst_requests.sh
+	# ./burst_requests.sh
+	lein run -m procrustes.client/burst
