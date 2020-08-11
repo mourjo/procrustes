@@ -16,7 +16,8 @@
                  [org.slf4j/slf4j-log4j12 "1.7.30"]
                  [ring/ring-defaults "0.3.2"]
                  [org.eclipse.jetty/jetty-jmx "9.4.31.v20200723"]
-                 [clj-statsd "0.4.0"]]
+                 [clj-statsd "0.4.0"]
+                 [cheshire "5.10.0"]]
   :jvm-opts ^:replace ["-server"
                        "-Xms1g"
                        "-Xmx3g"
@@ -24,7 +25,8 @@
                        "-Duser.timezone=UTC"]
   :java-source-paths ["java_src"]
   :javac-options ["-target" "1.8" "-source" "1.8"]
-  :main ^:skip-aot procrustes.core
+  :main procrustes.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot      :all
-                       :jvm-opts ["-Dclojure.compiler.direct-linking=true"]}})
+                       :jvm-opts ["-Dclojure.compiler.direct-linking=true"]}}
+  :aot :all)

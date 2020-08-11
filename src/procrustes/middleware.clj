@@ -40,11 +40,17 @@
 
 (defn wrap-exceptions
   [handler]
-  (fn [request]
-    (try
-      (handler request)
-      (catch Throwable t
-        (ctl/error "Something was wrong:" t)))))
+  (fn
+    ([request]
+       (try
+         (handler request)
+         (catch Throwable t
+           (ctl/error "Something was wrong:" t))))
+    ([request respond raise]
+       (try
+         (handler request respond raise)
+         (catch Throwable t
+           (ctl/error "Something was wrong:" t))))))
 
 
 (defn wrap-server-type

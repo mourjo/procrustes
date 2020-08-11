@@ -96,7 +96,8 @@
 (defonce load-shedding-app
          (-> default-app
              (app-middleware/wrap-server-type utils/load-shedding-server)
-             async-to-sync))
+             async-to-sync
+             app-middleware/wrap-exceptions))
 
 
 (defn start-load-shedding-server
@@ -107,9 +108,10 @@
                                 :join?                 false
                                 :async?                true
                                 :async-timeout         (* 1000 max-allowed-delay-sec)
-                                :async-timeout-handler (fn [_ _ _]
-                                                         {:status 504
-                                                          :body   "<h1>Try again later</h1>"})
+                                :async-timeout-handler (fn [request-map respond-callback error-callback]
+                                                         (respond-callback
+                                                          {:status 504
+                                                           :body   "<h1>Try again later</h1>"}))
                                 :max-threads           8
                                 :min-threads           1
                                 :max-queued-requests   500  ;; <--- doesn't matter
