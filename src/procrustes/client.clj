@@ -1,15 +1,30 @@
 (ns procrustes.client
   (:require [cheshire.core :as cc]
+            [procrustes.env :as env]
             [clj-http.client :as http]
             [clj-statsd :as statsd]
             [clojure.tools.logging :as ctl]
             [com.climate.claypoole :as cp]
-            [procrustes.utils :as utils])
-  (:import [java.util.concurrent TimeUnit SynchronousQueue ThreadPoolExecutor$CallerRunsPolicy ThreadPoolExecutor]))
+            [procrustes.utils :as utils]
+            [clojure.java.jmx :as jmx])
+  (:import [java.util.concurrent
+            ExecutorService
+            SynchronousQueue
+            ThreadPoolExecutor
+            ThreadPoolExecutor$CallerRunsPolicy
+            TimeUnit]))
 
 (defonce request-counter
   (atom {utils/non-load-shedding-server 0
          utils/load-shedding-server 0}))
+
+(defn update-slow-poke-time
+  [n-sec]
+  (jmx/with-connection {:host "localhost", :port 1919}
+    (jmx/write! "me.mourjo:type=EnvBean" :SlowPokeTime (int n-sec)))
+  (jmx/with-connection {:host "localhost", :port 1920}
+    (jmx/write! "me.mourjo:type=EnvBean" :SlowPokeTime (int n-sec)))
+  (ctl/info "Updated slow poke time on servers to" n-sec "seconds"))
 
 
 (defn grafana-load-start-annotation
@@ -71,7 +86,7 @@
                    (.getMessage e))))))
 
 
-(defn synchronous-pool
+(defn ^ExecutorService synchronous-pool
   [n]
   (ThreadPoolExecutor. ^int n
                        ^int n
@@ -83,25 +98,26 @@
 
 (defn fire-away
   [server-type route n]
-  (cp/with-shutdown! [pool (synchronous-pool 500)]
+  (let [pool (cp/threadpool 500)]
     (dotimes [_ n]
       (Thread/sleep 50)
       (cp/future pool (http-get server-type route)))
-    (await statsd/sockagt)))
+    (await statsd/sockagt)
+    pool))
 
 
 (defn burst-non-load-shedding-server
   []
   (fire-away utils/non-load-shedding-server
              "http://localhost:3200/slow"
-             1000))
+             600))
 
 
 (defn burst-load-shedding-server
   []
   (fire-away utils/load-shedding-server
              "http://localhost:3100/slow"
-             1000))
+             600))
 
 
 (defn slow-continuous-load
@@ -120,13 +136,14 @@
   []
   (statsd/setup "localhost" 8125)
   (slow-continuous-load)
-  (Thread/sleep 120000)
+  (Thread/sleep 30000)
 
   (with-grafana-annotations
     (ctl/info "Starting burst")
     (let [f1 (future (burst-load-shedding-server))
           f2 (future (burst-non-load-shedding-server))]
-      @f1 @f2)
+      (.shutdown ^ExecutorService @f1)
+      (.shutdown ^ExecutorService @f2))
     (ctl/info "Finished burst")))
 
 
@@ -136,28 +153,42 @@
   (slow-continuous-load)
   (Thread/sleep 30000)
   (ctl/info "Starting steady stream")
+  (update-slow-poke-time 4)
   (grafana-load-start-annotation)
-  (.addShutdownHook (Runtime/getRuntime)
-                    (Thread. ^Runnable grafana-load-end-annotation))
-  (future
-    (cp/with-shutdown! [pool (cp/threadpool 40)]
-      (loop []
-        (cp/future pool
-                   (http-get utils/load-shedding-server
-                             "http://localhost:3100/slow"))
-        (cp/future pool
-                   (http-get utils/non-load-shedding-server
-                             "http://localhost:3200/slow"))
-        (Thread/sleep 750)
-        (recur))))
-
-  (cp/with-shutdown! [pool (cp/threadpool 40)]
-    (loop []
-      (cp/future pool
-                 (http-get utils/load-shedding-server
-                           "http://localhost:3100/fast"))
-      (cp/future pool
-                 (http-get utils/non-load-shedding-server
-                           "http://localhost:3200/fast"))
-      (Thread/sleep 750)
-      (recur))))
+  (let [p (promise)
+        n 500
+        _ (.addShutdownHook (Runtime/getRuntime)
+                            (Thread. ^Runnable (fn []
+                                                 (when-not (realized? p)
+                                                   (grafana-load-end-annotation)
+                                                   (update-slow-poke-time 3)))))
+        f1 (future
+             (cp/with-shutdown! [pool (cp/threadpool 40)]
+               (loop [i n]
+                 (cp/future pool
+                            (http-get utils/load-shedding-server
+                                      "http://localhost:3100/slow"))
+                 (cp/future pool
+                            (http-get utils/non-load-shedding-server
+                                      "http://localhost:3200/slow"))
+                 (Thread/sleep 750)
+                 (if (pos? i)
+                   (recur (dec i))
+                   (ctl/info "Finished slow routes")))))
+        f2 (future
+             (cp/with-shutdown! [pool (cp/threadpool 40)]
+               (loop [i n]
+                 (cp/future pool
+                            (http-get utils/load-shedding-server
+                                      "http://localhost:3100/fast"))
+                 (cp/future pool
+                            (http-get utils/non-load-shedding-server
+                                      "http://localhost:3200/fast"))
+                 (Thread/sleep 750)
+                 (if (pos? i)
+                   (recur (dec i))
+                   (ctl/info "Finished fast routes")))))]
+    @f1 @f2
+    (deliver p ::done)
+    (grafana-load-end-annotation)
+    (update-slow-poke-time 3)))

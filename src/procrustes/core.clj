@@ -19,7 +19,7 @@
            (me.mourjo RunnableQueueBuilder)
            (org.eclipse.jetty.io EofException)))
 
-(def max-allowed-delay-sec 5)
+(def max-allowed-delay-sec 6)
 (def max-pending-requests 20)
 
 (defonce ^BlockingQueue tp-queue (RunnableQueueBuilder/buildQueue max-pending-requests))

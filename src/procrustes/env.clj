@@ -14,3 +14,7 @@
 (defn slow-poke-time
   []
   (.getSlowPokeTime env-bean))
+
+(defn set-slow-poke-time
+  [n]
+  (.setSlowPokeTime env-bean (int n)))

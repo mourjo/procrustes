@@ -17,6 +17,7 @@
                  [ring/ring-defaults "0.3.2"]
                  [org.eclipse.jetty/jetty-jmx "9.4.31.v20200723"]
                  [clj-statsd "0.4.0"]
+                 [org.clojure/java.jmx "1.0.0"]
                  [cheshire "5.10.0"]]
   :jvm-opts ^:replace ["-server"
                        "-Xms1g"
@@ -27,6 +28,6 @@
   :javac-options ["-target" "1.8" "-source" "1.8"]
   :main procrustes.core
   :target-path "target/%s"
-  :profiles {:uberjar {:aot      :all
+  :profiles {:uberjar {:aot :all
                        :jvm-opts ["-Dclojure.compiler.direct-linking=true"]}}
   :aot :all)
