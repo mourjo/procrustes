@@ -17,7 +17,7 @@ calls this kind of load shedding a Procrustean load shedding.
 
 ## Strategy for load shedding
 
-This approach focuses on the two following goals:
+This approach focuses on the following goals:
 1. Bounded waiting time in the request queue
 2. Unblocking client via timeouts
 3. Limited number of open requests in the system
@@ -60,10 +60,15 @@ make steady_requests
 ## Results
 
 When the servers were sent a burst of requests:
+
+
 ![Short, bursty requests](img/bursty_requests.jpg)
+
 
 When the servers were sent a steady stream of requests with a degraded dependency for a
 while:
+
+
 ![Steady requests](img/steady_requests.jpg)
 
 
