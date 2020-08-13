@@ -62,14 +62,14 @@ make steady_requests
 When the servers were sent a burst of requests:
 
 
-![Short, bursty requests](img/bursty_requests.jpg)
+![Short, bursty requests](resources/bursty_requests.jpg)
 
 
 When the servers were sent a steady stream of requests with a degraded dependency for a
 while:
 
 
-![Steady requests](img/steady_requests.jpg)
+![Steady requests](resources/steady_requests.jpg)
 
 
 
