@@ -18,11 +18,12 @@
   (atom {utils/non-load-shedding-server 0
          utils/load-shedding-server 0}))
 
+
 (defn update-slow-poke-time
   [n-sec]
-  (jmx/with-connection {:host "localhost", :port 1919}
+  (jmx/with-connection env/jmx-ls-conn
     (jmx/write! "me.mourjo:type=EnvBean" :SlowPokeTime (int n-sec)))
-  (jmx/with-connection {:host "localhost", :port 1920}
+  (jmx/with-connection env/jmx-nls-conn
     (jmx/write! "me.mourjo:type=EnvBean" :SlowPokeTime (int n-sec)))
   (ctl/info "Updated slow poke time on servers to" n-sec "seconds"))
 
@@ -30,7 +31,7 @@
 (defn grafana-load-start-annotation
   []
   (ctl/info "Running Grafana load start annotation")
-  (http/post "http://localhost/api/annotations"
+  (http/post env/grafana-annotations-endpoint
              {:throw-exceptions false
               :content-type :json
               :basic-auth ["admin" "admin"]
@@ -44,7 +45,7 @@
 (defn grafana-load-end-annotation
   []
   (ctl/info "Running Grafana load end annotation")
-  (http/post "http://localhost/api/annotations"
+  (http/post env/grafana-annotations-endpoint
              {:throw-exceptions false
               :content-type :json
               :basic-auth ["admin" "admin"]
@@ -109,14 +110,14 @@
 (defn burst-non-load-shedding-server
   []
   (fire-away utils/non-load-shedding-server
-             "http://localhost:3200/slow"
+             env/slow-nls-route
              600))
 
 
 (defn burst-load-shedding-server
   []
   (fire-away utils/load-shedding-server
-             "http://localhost:3100/slow"
+             env/slow-ls-route
              600))
 
 
@@ -124,17 +125,19 @@
   []
   (future
     (loop []
-      (http-get utils/load-shedding-server "http://localhost:3100/slow")
+      (http-get utils/load-shedding-server env/slow-ls-route)
       (recur)))
   (future
     (loop []
-      (http-get utils/non-load-shedding-server "http://localhost:3200/slow")
+      (http-get utils/non-load-shedding-server env/slow-nls-route)
       (recur))))
 
 
 (defn burst
+  "Send a burst of requests to both load shedding and non load shedding servers that lasts
+  for a short time."
   []
-  (statsd/setup "localhost" 8125)
+  (env/setup-statsd)
   (slow-continuous-load)
   (Thread/sleep 30000)
 
@@ -148,8 +151,11 @@
 
 
 (defn steady
+  "Fire requests to both the load shedding and non load shedding servers at a steady
+  rate. After a while, it increases the time taken to process the slow route on both
+  servers while keeping the same rate of requests."
   []
-  (statsd/setup "localhost" 8125)
+  (env/setup-statsd)
   (slow-continuous-load)
   (Thread/sleep 30000)
   (ctl/info "Starting steady stream")
@@ -167,10 +173,10 @@
                (loop [i n]
                  (cp/future pool
                             (http-get utils/load-shedding-server
-                                      "http://localhost:3100/slow"))
+                                      env/slow-ls-route))
                  (cp/future pool
                             (http-get utils/non-load-shedding-server
-                                      "http://localhost:3200/slow"))
+                                      env/slow-nls-route))
                  (Thread/sleep 750)
                  (if (pos? i)
                    (recur (dec i))
@@ -180,10 +186,10 @@
                (loop [i n]
                  (cp/future pool
                             (http-get utils/load-shedding-server
-                                      "http://localhost:3100/fast"))
+                                      env/fast-ls-route))
                  (cp/future pool
                             (http-get utils/non-load-shedding-server
-                                      "http://localhost:3200/fast"))
+                                      env/fast-nls-route))
                  (Thread/sleep 750)
                  (if (pos? i)
                    (recur (dec i))

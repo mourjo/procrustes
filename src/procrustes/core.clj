@@ -8,7 +8,6 @@
             [compojure.core :refer [ANY defroutes]]
             [compojure.route :refer [not-found]]
             [clojure.string :as cs]
-            [clj-statsd :as statsd]
             [clojure.tools.logging :as ctl])
   (:gen-class)
   (:import (java.util.concurrent ExecutorService
@@ -24,23 +23,23 @@
 
 (defonce ^BlockingQueue tp-queue (RunnableQueueBuilder/buildQueue max-pending-requests))
 (defonce ^ExecutorService request-processor-pool
-         (let [tp (ThreadPoolExecutor.
-                    5
-                    5
-                    60
-                    TimeUnit/SECONDS
-                    tp-queue
-                    (utils/create-thread-factory "request-processor-pool-"))]
-           (.addShutdownHook (Runtime/getRuntime)
-                             (Thread. ^Runnable (fn [] (.shutdown ^ExecutorService tp))))
-           tp))
+  (let [tp (ThreadPoolExecutor.
+            5
+            5
+            60
+            TimeUnit/SECONDS
+            tp-queue
+            (utils/create-thread-factory "request-processor-pool-"))]
+    (.addShutdownHook (Runtime/getRuntime)
+                      (Thread. ^Runnable (fn [] (.shutdown ^ExecutorService tp))))
+    tp))
 
 
 (defroutes routes
-           (ANY "/" params (handlers/default-response params))
-           (ANY "/slow" params (handlers/slow-poke params))
-           (ANY "/fast" params (handlers/fast-poke params))
-           (ANY "*" _ (not-found "Incorrect route")))
+  (ANY "/" params (handlers/default-response params))
+  (ANY "/slow" params (handlers/slow-poke params))
+  (ANY "/fast" params (handlers/fast-poke params))
+  (ANY "*" _ (not-found "Incorrect route")))
 
 
 (defn drop-request
@@ -55,6 +54,7 @@
 
 
 (defn hand-off-request
+  "Submit the handler to a threadpool for request processing."
   [handler-fn response-callback request-map]
   ;; no binding conveyance required here
   (.submit request-processor-pool
@@ -72,35 +72,39 @@
                               (ctl/error t))))))
 
 
-(defn async-to-sync
+(defn wrap-load-monitor
+  "Convert a synchronous handler into an asynchronous handler for the purposes for
+  shedding load."
   [handler-fn]
   (fn [request-map response-callback error-callback]
     (try (hand-off-request handler-fn response-callback request-map)
          (catch RejectedExecutionException _
            (drop-request request-map)
            (response-callback
-             {:status 429 :body "<h1>Try again later</h1>"}))
+            {:status 429 :body "<h1>Try again later</h1>"}))
          (catch Throwable t
            (ctl/error t)))))
 
 
 (defonce default-app
-         (-> routes
-             (default-middleware/wrap-defaults default-middleware/site-defaults)
-             app-middleware/wrap-request-id
-             app-middleware/wrap-request-counter
-             (app-middleware/wrap-server-type utils/non-load-shedding-server)
-             app-middleware/wrap-exceptions))
+  ;; The app that would be there without load shedding
+  (-> routes
+      (default-middleware/wrap-defaults default-middleware/site-defaults)
+      app-middleware/wrap-request-id
+      app-middleware/wrap-request-counter
+      (app-middleware/wrap-server-type utils/non-load-shedding-server)
+      app-middleware/wrap-exceptions))
 
 
 (defonce load-shedding-app
-         (-> default-app
-             (app-middleware/wrap-server-type utils/load-shedding-server)
-             async-to-sync
-             app-middleware/wrap-exceptions))
+  ;; Wrap the actual app with the load monitor
+  (-> default-app
+      (app-middleware/wrap-server-type utils/load-shedding-server)
+      wrap-load-monitor))
 
 
 (defn start-load-shedding-server
+  "Starts the load shedding server"
   []
   (ctl/info "Staring load-shedding server")
   (let [jetty (jetty/run-jetty load-shedding-app
@@ -120,6 +124,7 @@
 
 
 (defn start-basic-server
+  "Starts the non-load shedding server"
   []
   (ctl/info "Staring non-load-shedding server")
   (let [jetty (jetty/run-jetty default-app
@@ -132,6 +137,9 @@
 
 
 (defn -main
+  "Starting point to start one of the servers, if the environment variabel SHED_LOAD is
+  set to false, start the non-load shedding server, otherwise start the load shedding
+  server."
   [& _]
   (env/start)
   (if (= "TRUE" (cs/upper-case (or (System/getenv "SHED_LOAD") "false")))

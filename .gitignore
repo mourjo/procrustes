@@ -14,3 +14,4 @@ pom.xml.asc
 doc/
 .idea/
 async_jetty.iml
+.DS_Store
