@@ -79,6 +79,7 @@
   (fn [request-map response-callback error-callback]
     (try (hand-off-request handler-fn response-callback request-map)
          (catch RejectedExecutionException _
+           ;; number of concurrent requests in the system > allowed limit
            (drop-request request-map)
            (response-callback
             {:status 429 :body "<h1>Try again later</h1>"}))
@@ -112,12 +113,11 @@
                                 :join?                 false
                                 :async?                true
                                 :async-timeout         (* 1000 max-allowed-delay-sec)
-                                :async-timeout-handler (fn [request-map respond-callback error-callback]
+                                :async-timeout-handler (fn [request respond-callback error-callback]
                                                          (respond-callback
-                                                          {:status 504
-                                                           :body   "<h1>Try again later</h1>"}))
+                                                           {:status 504
+                                                            :body   "<h1>Try again later</h1>"}))
                                 :max-threads           8
-                                :min-threads           1
                                 :max-queued-requests   500  ;; <--- doesn't matter
                                 })]
     (utils/log-load utils/load-shedding-server tp-queue (:pool jetty) 1000)))
