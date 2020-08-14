@@ -23,7 +23,7 @@ This approach focuses on the following goals:
 3. Limited number of open requests in the system
 
 ## Dependent services
-This uses the following dependencies on ports:
+This uses the following dependencies on ports (which can be installed via [this docker image](https://github.com/kamon-io/docker-grafana-graphite)):
 1. Grafana on localhost:80
 2. Statsd on localhost:8125
 

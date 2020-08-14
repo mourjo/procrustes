@@ -131,7 +131,6 @@
                                {:port                3200
                                 :join?               false
                                 :max-queued-requests 500
-                                ;; only difference from Moby:
                                 :max-threads         8})]
     (utils/log-load utils/non-load-shedding-server (:pool jetty) 1000)))
 
