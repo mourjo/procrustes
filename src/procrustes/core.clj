@@ -66,7 +66,8 @@
                               ;; connection has been closed by the client
                               )
                             (catch IllegalStateException t
-                              ;; request lifecycle changed, async timeout handler has already closed the request
+                              ;; request lifecycle changed, async timeout handler has already
+                              ;; closed the request
                               )
                             (catch Throwable t
                               (ctl/error t))))))
