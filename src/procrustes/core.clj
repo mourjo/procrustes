@@ -137,7 +137,7 @@
 
 
 (defn -main
-  "Starting point to start one of the servers, if the environment variabel SHED_LOAD is
+  "Starting point to start one of the servers, if the environment variable SHED_LOAD is
   set to false, start the non-load shedding server, otherwise start the load shedding
   server."
   [& _]
