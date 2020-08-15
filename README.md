@@ -39,6 +39,9 @@ image](https://github.com/kamon-io/docker-grafana-graphite)):
 1. Grafana on localhost:80
 2. Statsd on localhost:8125
 
+The clients can work without Grafana or Statsd, however, it is useful 
+to have those visualisations.
+
 Additionally, the servers themselves start a JMX server for the demo clients to dynamically
 control how long a route should take (to simulate a downstream dependency becoming slow).
 

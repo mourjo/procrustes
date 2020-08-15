@@ -12,7 +12,8 @@
             SynchronousQueue
             ThreadPoolExecutor
             ThreadPoolExecutor$CallerRunsPolicy
-            TimeUnit]))
+            TimeUnit]
+           (java.net ConnectException)))
 
 (defonce request-counter
   (atom {utils/non-load-shedding-server 0
@@ -21,39 +22,43 @@
 
 (defn update-slow-poke-time
   [n-sec]
-  (jmx/with-connection env/jmx-ls-conn
-    (jmx/write! "me.mourjo:type=EnvBean" :SlowPokeTime (int n-sec)))
-  (jmx/with-connection env/jmx-nls-conn
-    (jmx/write! "me.mourjo:type=EnvBean" :SlowPokeTime (int n-sec)))
-  (ctl/info "Updated slow poke time on servers to" n-sec "seconds"))
+  (try
+    (jmx/with-connection env/jmx-ls-conn
+                         (jmx/write! "me.mourjo:type=EnvBean" :SlowPokeTime (int n-sec)))
+    (jmx/with-connection env/jmx-nls-conn
+                         (jmx/write! "me.mourjo:type=EnvBean" :SlowPokeTime (int n-sec)))
+    (ctl/info "Updated slow poke time on servers to" n-sec "seconds")
+    (catch Exception _)))
 
 
 (defn grafana-load-start-annotation
   []
-  (ctl/info "Running Grafana load start annotation")
-  (http/post env/grafana-annotations-endpoint
-             {:throw-exceptions false
-              :content-type :json
-              :basic-auth ["admin" "admin"]
-              :body (cc/generate-string
-                     {:time (System/currentTimeMillis)
-                      :timeEnd (System/currentTimeMillis)
-                      :tags ["load_start"]
-                      :text "Load starting"})}))
+  (try
+    (http/post env/grafana-annotations-endpoint
+               {:throw-exceptions false
+                :content-type     :json
+                :basic-auth       ["admin" "admin"]
+                :body             (cc/generate-string
+                                    {:time    (System/currentTimeMillis)
+                                     :timeEnd (System/currentTimeMillis)
+                                     :tags    ["load_start"]
+                                     :text    "Load starting"})})
+    (catch ConnectException _)))
 
 
 (defn grafana-load-end-annotation
   []
-  (ctl/info "Running Grafana load end annotation")
-  (http/post env/grafana-annotations-endpoint
-             {:throw-exceptions false
-              :content-type :json
-              :basic-auth ["admin" "admin"]
-              :body (cc/generate-string
-                     {:time (System/currentTimeMillis)
-                      :timeEnd (System/currentTimeMillis)
-                      :tags ["load_end"]
-                      :text "Load ending"})}))
+  (try
+    (http/post env/grafana-annotations-endpoint
+               {:throw-exceptions false
+                :content-type     :json
+                :basic-auth       ["admin" "admin"]
+                :body             (cc/generate-string
+                                    {:time    (System/currentTimeMillis)
+                                     :timeEnd (System/currentTimeMillis)
+                                     :tags    ["load_end"]
+                                     :text    "Load ending"})})
+    (catch ConnectException _)))
 
 
 (defmacro with-grafana-annotations
