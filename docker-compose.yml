@@ -1,0 +1,17 @@
+version: '3'
+services:
+  procrustes_grafana_infux_statsd:
+    image: samuelebistoletti/docker-statsd-influxdb-grafana:2.3.0
+    ports:
+      - '3003:3003'
+      - '3004:8888'
+      - '8086:8086'
+      - '8125:8125/udp'
+    volumes:
+      - ./data/grafana:/var/lib/grafana
+      - ./data/influxdb:/var/lib/influxdb
+      - ./log/grafana:/var/log/grafana
+    ulimits:
+      nofile:
+        soft: 66000
+        hard: 66000

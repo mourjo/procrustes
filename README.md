@@ -36,11 +36,12 @@ required for this demo. The fork is available on Clojars: `mourjo/ring-jetty-ada
 ## Dependent services
 This uses the following dependencies on ports (which can be installed via [this docker
 image](https://github.com/kamon-io/docker-grafana-graphite)):
-1. Grafana on localhost:80
+1. Grafana on localhost:3003
 2. Statsd on localhost:8125
 
-The clients can work without Grafana or Statsd, however, it is useful 
-to have those visualisations.
+The clients can work without Grafana or Statsd, however, it is useful
+to have those visualisations. A simple dashboard is exported here:
+resources/grafana_dashboard.json
 
 Additionally, the servers themselves start a JMX server for the demo clients to dynamically
 control how long a route should take (to simulate a downstream dependency becoming slow).
