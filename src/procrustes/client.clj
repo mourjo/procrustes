@@ -24,9 +24,9 @@
   [n-sec]
   (try
     (jmx/with-connection env/jmx-ls-conn
-                         (jmx/write! "me.mourjo:type=EnvBean" :SlowPokeTime (int n-sec)))
+      (jmx/write! "me.mourjo:type=EnvBean" :SlowPokeTime (int n-sec)))
     (jmx/with-connection env/jmx-nls-conn
-                         (jmx/write! "me.mourjo:type=EnvBean" :SlowPokeTime (int n-sec)))
+      (jmx/write! "me.mourjo:type=EnvBean" :SlowPokeTime (int n-sec)))
     (ctl/info "Updated slow poke time on servers to" n-sec "seconds")
     (catch Exception _)))
 
@@ -37,7 +37,7 @@
     (http/post env/grafana-annotations-endpoint
                {:throw-exceptions false
                 :content-type     :json
-                :basic-auth       ["admin" "admin"]
+                :basic-auth       env/grafana-annotations-creds
                 :body             (cc/generate-string
                                     {:time    (System/currentTimeMillis)
                                      :timeEnd (System/currentTimeMillis)
@@ -52,7 +52,7 @@
     (http/post env/grafana-annotations-endpoint
                {:throw-exceptions false
                 :content-type     :json
-                :basic-auth       ["admin" "admin"]
+                :basic-auth       env/grafana-annotations-creds
                 :body             (cc/generate-string
                                     {:time    (System/currentTimeMillis)
                                      :timeEnd (System/currentTimeMillis)
