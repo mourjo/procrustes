@@ -76,7 +76,7 @@
       (statsd/with-timing (str server-type "_client_time")
         (statsd/increment (str server-type ".client_request_fired"))
         (let [response (http/get route {:throw-exceptions false})]
-          (statsd/increment (str server-type ".response_code." (:status response)))
+          (statsd/increment (str server-type ".http_response_code,status=" (:status response)))
           (ctl/info (format "Request %d completed for" id)
                     server-type
                     route)
@@ -85,7 +85,7 @@
                        (with-out-str (clojure.pprint/pprint response))))
           response))
       (catch Exception e
-        (statsd/increment (str server-type ".response_code.FAIL"))
+        (statsd/increment (str server-type ".http_response_code,status=FAIL"))
         (ctl/error (format "Request %d completed for" id)
                    server-type
                    route
