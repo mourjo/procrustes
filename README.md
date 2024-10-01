@@ -1,7 +1,8 @@
 # Procrustes
 
-This is a to show how load shedding must be baked into web servers. This project aims to 
-show the difference between a server that sheds load and one that does not. 
+This is a project to show how load shedding must be baked into web servers: 
+the aim is to show the difference between a server that sheds load and one 
+that does not. 
 
 This is a companion project for the following blog posts about load shedding:
 - [The concept of load shedding](https://medium.com/helpshift-engineering/introduction-to-load-shedding-9fa8cfa1ffe4)
