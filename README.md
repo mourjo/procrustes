@@ -1,15 +1,14 @@
 # Procrustes
 
-This is a demo on load shedding in Clojure/Ring servers. It aims to show the difference
-between a server that sheds load and one that does not. This is a companion project for
-the following blog posts about load shedding:
+This is a to show how load shedding must be baked into web servers. This project aims to 
+show the difference between a server that sheds load and one that does not. 
+
+A video of the demo is available
+[here](https://youtu.be/W1mICdTHRyo).
+
+This is a companion project for the following blog posts about load shedding:
 - [The concept of load shedding](https://medium.com/helpshift-engineering/introduction-to-load-shedding-9fa8cfa1ffe4)
 - [Load-shedding in action](https://medium.com/helpshift-engineering/load-shedding-in-clojure-d4857ce11588)
-
-
-The Makefile contains the entry
-points to start the servers and a few client utilities to demonstrate the behaviour of
-these servers under load.
 
 The load shedding strategy is basic, in the sense that it does not dynamically adapt to
 changing conditions, the [Google SRE
@@ -101,8 +100,6 @@ case of the non load shedding server:
 
 ![Steady requests](resources/steady_requests.jpg)
 
-A video of the demo is available
-[here](https://drive.google.com/file/d/15IAeuQzQyzFra-eKdrWyC735s8_m5hxz/view?usp=sharing).
 
 ## License
 
