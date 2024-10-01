@@ -25,7 +25,7 @@
                        "-Djava.awt.headless=true"
                        "-Duser.timezone=UTC"]
   :java-source-paths ["java_src"]
-  :javac-options ["-target" "1.8" "-source" "1.8"]
+  :javac-options ["-target" "11" "-source" "11"]
   :main procrustes.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all
