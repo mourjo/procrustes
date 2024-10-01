@@ -3,9 +3,6 @@
 This is a to show how load shedding must be baked into web servers. This project aims to 
 show the difference between a server that sheds load and one that does not. 
 
-A video of the demo is available
-[here](https://youtu.be/W1mICdTHRyo).
-
 This is a companion project for the following blog posts about load shedding:
 - [The concept of load shedding](https://medium.com/helpshift-engineering/introduction-to-load-shedding-9fa8cfa1ffe4)
 - [Load-shedding in action](https://medium.com/helpshift-engineering/load-shedding-in-clojure-d4857ce11588)
@@ -21,6 +18,10 @@ calls this kind of load shedding a Procrustean load shedding.
 > utilization or request queue length, and when this load number crosses a predetermined
 > "safe" level as established by load testing, drop a fraction of incoming traffic to
 > bring the load back to safe levels.
+
+
+A demo of load-shedding using this project is available
+[here](https://youtu.be/W1mICdTHRyo).
 
 ## Strategy for load shedding
 
