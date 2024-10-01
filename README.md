@@ -1,7 +1,13 @@
 # Procrustes
 
 This is a demo on load shedding in Clojure/Ring servers. It aims to show the difference
-between a server that sheds load and one that does not. The Makefile contains the entry
+between a server that sheds load and one that does not. This is a companion project for
+the following blog posts about load shedding:
+- [The concept of load shedding](https://medium.com/helpshift-engineering/introduction-to-load-shedding-9fa8cfa1ffe4)
+- [Load-shedding in action](https://medium.com/helpshift-engineering/load-shedding-in-clojure-d4857ce11588)
+
+
+The Makefile contains the entry
 points to start the servers and a few client utilities to demonstrate the behaviour of
 these servers under load.
 
