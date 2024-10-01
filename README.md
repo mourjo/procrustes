@@ -33,10 +33,10 @@ This approach focuses on the following goals:
 
 To achieve this, we are using a custom fork of [Ring](https://github.com/mourjo/ring),
 mainly to get the ability to:
-1. Track the time a request was ingested into the server
+1. Track the time at which a request was ingested into the server
 2. Control how an asynchronous handler in Jetty responds to the client upon timeout
 
-The second requirement was merged into Ring in this [pull
+The second requirement is now merged into Ring in this [pull
 request](https://github.com/ring-clojure/ring/pull/410) but the first one is still
 required for this demo. The fork is available on Clojars: `mourjo/ring-jetty-adapter`.
 
